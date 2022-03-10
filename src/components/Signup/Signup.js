@@ -21,7 +21,7 @@ const Signup = () => {
       ...data,
       date_joined: new Date().toLocaleString(),
     };
-    const req = new Request("http://192.168.100.140:3001/user/register", {
+    const req = new Request("https://drc-team4.herokuapp.com/user/register", {
       method: "POST",
       headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(userInfo),

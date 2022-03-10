@@ -20,7 +20,7 @@ const ImageUpload = () => {
     formData.append("fileName", fileName);
 
     try {
-      const req = new Request("http://localhost:3001/api/upload", {
+      const req = new Request("https://drc-team4.herokuapp.com/api/upload", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(formData),
