@@ -40,7 +40,6 @@ const Signup = () => {
         if (data.message) {
           return setMessage(data.message);
         } else {
-          console.log(data.error);
           return setErrorMessage(data.error);
         }
       });
