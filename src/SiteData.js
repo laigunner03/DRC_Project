@@ -1,15 +1,16 @@
 import { createContext, useEffect, useState } from "react";
-
 export const SiteDataContext = createContext();
 
 const SiteData = ({ children }) => {
-  const [user_data, setUserData] = useState(null);
-  const [error_message, setErrorMessage] = useState("Ok");
+  const [user_data, setUserData] = useState();
+  const [is_data_ready, setDataReady] = useState(false);
+  const [error_message, setErrorMessage] = useState("");
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("user_data"));
     if (data) {
       setUserData(data);
+      setDataReady(true);
     }
   }, []);
 
@@ -26,24 +27,31 @@ const SiteData = ({ children }) => {
 
     const res = await fetch(req);
     const data = await res.json();
-    console.log(data);
     if (data.message) {
       setErrorMessage(data.message);
     } else {
       // loginid, username, full_name, email, phone, date_joined, user_img
       setUserData(data);
       localStorage.setItem("user_data", JSON.stringify(data));
+      setDataReady(true);
     }
   };
 
   const handleLogout = async () => {
     localStorage.removeItem("user_data");
     setUserData(null);
+    window.location.pathname = "/";
   };
 
   return (
     <SiteDataContext.Provider
-      value={{ user_data, error_message, handleLogin, handleLogout }}
+      value={{
+        user_data,
+        error_message,
+        handleLogin,
+        handleLogout,
+        is_data_ready,
+      }}
     >
       {children}
     </SiteDataContext.Provider>
