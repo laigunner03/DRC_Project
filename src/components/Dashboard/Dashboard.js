@@ -23,12 +23,12 @@ import WalletReloadModal from "../Modal/WalletReloadModal";
 
 Chart.register(...registerables);
 
-function Dashboard() {
+function Dashboard(props) {
   //light mode and dark mode
   const [theme, setTheme] = React.useState("dark");
   const [getLabel, setLabel] = React.useState(["Loss", "Profit"]);
   const [dataSets, setDataSets] = React.useState([35, 65]);
-  const { user_data } = useContext(SiteDataContext);
+  const { user_data, is_data_ready, wallet_list } = useContext(SiteDataContext);
   const [doughnutType, setDoughnutType] = React.useState("");
   const [display, setDisplay] = React.useState("none");
   const WalletPopupHandler = () => {
@@ -40,6 +40,10 @@ function Dashboard() {
   };
 
   let curr_date = new Date();
+
+  if (!is_data_ready) {
+    return <h1>Loading..</h1>;
+  }
 
   return (
     <div className="DashBG">
@@ -74,7 +78,7 @@ function Dashboard() {
           <div className="profile-avatar">
             <Avatar
               alt="user's pic"
-              src={ProfilePic}
+              src={props.dashDP}
               sx={[
                 {
                   "@media (max-width: 1720px)": {
@@ -103,7 +107,12 @@ function Dashboard() {
         <div className="Wallet">
           <div className="w-value">
             <p>Wallet's Balance</p>
-            <h1 id="wal-bal">USD 0</h1>
+            <h1 id="wal-bal">
+              USD{" "}
+              {wallet_list
+                .find((w) => w.currency === "USD")
+                ?.balance.toLocaleString("en-US") || "0"}
+            </h1>
           </div>
           <img
             className="w-icon"
